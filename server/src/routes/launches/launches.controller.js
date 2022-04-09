@@ -1,10 +1,15 @@
-const { getAllLaunches, addNewLaunch } = require("../../models/launches.model");
+const {
+  getAllLaunches,
+  addNewLaunch,
+  existsLaunchWithId,
+  abortLaunchById,
+} = require("../../models/launches.model");
 
-function HttpGetAllLaunches(req, res) {
+function httpGetAllLaunches(req, res) {
   return res.status(200).json(getAllLaunches());
 }
 
-function HttpAddNewLaunch(req, res) {
+function httpAddNewLaunch(req, res) {
   const launch = req.body;
 
   if (
@@ -30,7 +35,21 @@ function HttpAddNewLaunch(req, res) {
   return res.status(201).json(launch);
 }
 
+function httpAbortLaunch(req, res) {
+  const launchId = Number(req.params.id);
+  console.log("in abort", launchId);
+  if (!existsLaunchWithId(launchId)) {
+    return res.status(404).json({
+      error: "Launch not found",
+    });
+  }
+  console.log(getAllLaunches());
+  const aborted = abortLaunchById(launchId);
+  return res.status(200).json(aborted);
+}
+
 module.exports = {
-  HttpGetAllLaunches,
-  HttpAddNewLaunch,
+  httpGetAllLaunches,
+  httpAddNewLaunch,
+  httpAbortLaunch,
 };
