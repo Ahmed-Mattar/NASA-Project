@@ -43,7 +43,6 @@ function httpAbortLaunch(req, res) {
       error: "Launch not found",
     });
   }
-  console.log(getAllLaunches());
   const aborted = abortLaunchById(launchId);
   return res.status(200).json(aborted);
 }
